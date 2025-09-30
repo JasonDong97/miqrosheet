@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.era.miqrosheet.domain.mapper.WbSheetCelldataMapper">
+
+    <select id="selectBySheetIndex" resultType="com.era.miqrosheet.domain.model.WbSheetCelldata">
+        select r, c, v
+        from wb_sheet_celldata
+        where sheet_index = #{index} and grid_key = #{gridKey}
+        order by r, c
+    </select>
+    
+    <delete id="deleteBySheetIndexAndPosition">
+        delete from wb_sheet_celldata
+        where sheet_index = #{index} and r = #{r} and c = #{c}
+    </delete>
+    
+    <insert id="insertOrUpdate">
+        insert into wb_sheet_celldata (sheet_index, grid_key, r, c, v, create_time, update_time)
+        values (#{sheetIndex}, #{gridKey}, #{r}, #{c}, #{v}, now(), now())
+        on duplicate key update v           = values(v),
+                                update_time = now()
+    </insert>
+    
+    <delete id="deleteRows">
+        delete from wb_sheet_celldata
+        where sheet_index = #{index} and r >= #{startRow} and r &lt; #{startRow} + #{len}
+    </delete>
+
+    <delete id="deleteColumns">
+        delete from wb_sheet_celldata
+        where sheet_index = #{index} and c >= #{startCol} and c &lt; #{startCol} + #{len}
+    </delete>
+    
+    <update id="updateRowNumbersAfterDelete">
+        update wb_sheet_celldata
+        set r = r - #{len}
+        where sheet_index = #{index} and r > #{startRow}
+    </update>
+    
+    <update id="updateColumnNumbersAfterDelete">
+        update wb_sheet_celldata
+        set c = c - #{len}
+        where sheet_index = #{index} and c > #{startCol}
+    </update>
+    
+    <update id="updateRowNumbersAfterInsert">
+        update wb_sheet_celldata
+        set r = r + #{len}
+        where sheet_index = #{index} and r >= #{startRow}
+    </update>
+    
+    <update id="updateColumnNumbersAfterInsert">
+        update wb_sheet_celldata
+        set c = c + #{len}
+        where sheet_index = #{index} and c >= #{startCol}
+    </update>
+</mapper>

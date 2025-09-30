@@ -1,0 +1,48 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /miqrosheet
+    encoding:
+        charset: UTF-8
+
+spring:
+  application:
+    name: MiQroSheet
+  datasource:
+    url: jdbc:mysql://10.36.160.33:3306/miqrosheet?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: EybTcTBcJCdjwOFh
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 60000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      pool-name: MiQroSheetHikariCP
+  redis:
+    host: 10.36.160.33
+    port: 31105
+    password: 'psQ!4Tr$!qSzk@'
+    database: 4
+    
+# SpringDoc OpenAPI ??
+knife4j:
+  enable: true
+  setting:
+    enable-footer: false
+    enable-document-manage: false
+  openapi:
+    title: MiQroSheet
+    description: ${knife4j.openapi.title}
+    version: v1.0
+    concat: dongjingxiang
+    email: dongjingxiang@miqroera.com
+    group:
+      default:
+        api-rule: annotation
+        api-rule-resources:
+          - io.swagger.annotations.Api
+logging:
+  level:
+    com.era.miqrosheet.domain.mapper.WbSheetMapper: debug
